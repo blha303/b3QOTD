@@ -1,6 +1,9 @@
 <html>
   <head>
     <style>
+      a {
+        text-decoration: none;
+      }
       textarea {
         font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
       }
@@ -38,7 +41,7 @@
     </table>
     <p><a href=/backups>Backups</a></p>
     <footer>
-      <a href="https://github.com/blha303/b3QOTD">b3QOTD</a> {{ info() }}
+      <a href="https://github.com/blha303/b3QOTD">b3QOTD</a> {{ info()|safe }}
     </footer>
   </body>
 </html>

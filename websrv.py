@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
 from flask import Flask, request, render_template, redirect, url_for, flash, jsonify
-from config import SECRET_KEY
+from config import SECRET_KEY, GH_URL
 
 from time import time
 from subprocess import check_output
@@ -8,6 +8,20 @@ from textwrap import fill
 
 def get_git_describe():
     tag = check_output(["git", "describe", "--tags"]).strip()
+    split = tag.split("-")
+    def fmt_tag(tag):
+        return '<a href="{0}/tree/{1}">{1}</a>'.format(GH_URL, tag)
+    def fmt_commit(hash):
+        return '<a href="{0}/commit/{1}">{1}</a>'.format(GH_URL, hash)
+    if len(split) == 1:
+        if split[0][0] == "v": # tag only
+            return fmt_tag(split[0])
+        elif len(split[0]) == 8: # commit hash
+            return fmt_commit(split[0])
+        else: # unknown
+            return split[0]
+    elif len(split) == 3: # tag-rev-hash
+        return "-".join([fmt_tag(split[0]), split[1], fmt_commit(split[2])])
     return tag
 
 f = Flask(__name__)
