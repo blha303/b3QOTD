@@ -1,8 +1,10 @@
 #!/usr/bin/env python2
-import flask
+from flask import Flask, request, render_template, redirect, url_for, flash
+from config import SECRET_KEY
 
-f = flask.Flask(__name__)
+f = Flask(__name__)
 f.debug = False
+f.secret_key = SECRET_KEY
 
 def get_quotes():
     with open("quotes.txt") as f:
@@ -33,16 +35,18 @@ def delete_quote(index):
 
 @f.route("/", methods=["GET", "POST", "PUT", "DELETE"])
 def index():
-    if flask.request.method == "GET":
-        return flask.render_template("index.html", quotes=enumerate(get_quotes()))
-    elif flask.request.method in ["PUT", "POST", "DELETE"]:
-        method = flask.request.form["_method"] if "_method" in flask.request.form else flask.request.method
+    if request.method == "GET":
+        return render_template("index.html", quotes=enumerate(get_quotes()))
+    elif request.method in ["PUT", "POST", "DELETE"]:
+        method = request.form["_method"] if "_method" in request.form else request.method
         if method in ["PUT", "POST"]:
-            print(method, flask.request.form)
-            return "Not yet implemented"
+            print(method, request.form)
+            flash("Not yet implemented")
+            return redirect(url_for('index'))
         elif method == "DELETE":
-            print(method, flask.request.form)
-            return "Not yet implemented"
+            print(method, request.form)
+            flash("Not yet implemented")
+            return redirect(url_for('index'))
 
 if __name__ == "__main__":
     f.run(port=57432)
