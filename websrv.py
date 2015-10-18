@@ -2,13 +2,20 @@
 from flask import Flask, request, render_template, redirect, url_for, flash
 from config import SECRET_KEY
 
+from subprocess import check_output
+
+def get_git_describe():
+    tag = check_output(["git", "describe", "--tags"]).strip()
+    return tag
+
 f = Flask(__name__)
 f.debug = False
 f.secret_key = SECRET_KEY
+f.jinja_env.globals.update(info=get_git_describe)
 
 def get_quotes():
     with open("quotes.txt") as f:
-        return ["\n{}\n\n".format(a.strip()) for a in f.read().split("\n\n")]
+        return [u"\n{}\n\n".format(a.strip()) for a in f.read().split(u"\n\n")]
 
 def add_quote(text):
     try:
@@ -18,7 +25,7 @@ def add_quote(text):
             text = text[81:]
         o.append(text)
         with open("quotes.txt", "a") as f:
-            f.write("\n\n" + "\n".join(text))
+            f.write(u"\n\n" + u"\n".join(text))
         return True, None
     except Exception, e:
         return False, e
@@ -31,7 +38,7 @@ def delete_quote(index):
         return None, e
     finally:
         with open("quotes.txt", "w") as f:
-            f.write("\n\n".join([a.strip() for a in quotes]))
+            f.write(u"\n\n".join([a.strip() for a in quotes]))
 
 @f.route("/", methods=["GET", "POST", "PUT", "DELETE"])
 def index():
