@@ -19,8 +19,14 @@ def get_quotes():
 
 def add_quote(text):
     try:
+        if len(text) > 4000:
+            raise Exception("Message longer than 50 lines (80 chars per line)")
+        if len(text) < 10:
+            raise Exception("Message shorter than 10 chars, not adding")
         o = []
         while text > 80:
+            if text[0] != u"<" or text[0] != u" ":
+                raise Exception("Each line must start with either a <username>, or spaces for indentation")
             o.append(text[:81])
             text = text[81:]
         o.append(text)
@@ -33,7 +39,7 @@ def add_quote(text):
 def delete_quote(index):
     quotes = get_quotes()
     try:
-        return quotes.pop(index)
+        return quotes.pop(int(index)), None
     except Exception, e:
         return None, e
     finally:
@@ -48,11 +54,19 @@ def index():
         method = request.form["_method"] if "_method" in request.form else request.method
         if method in ["PUT", "POST"]:
             print(method, request.form)
-            flash("Not yet implemented")
+            success, e = add_quote(request.form["quote"])
+            if success:
+                flash("Quote added")
+            else:
+                flash("Quote not added: {}".format(e.message))
             return redirect(url_for('index'))
         elif method == "DELETE":
             print(method, request.form)
-            flash("Not yet implemented")
+            quote, e = delete_quote(request.form["index"])
+            if quote:
+                flash("Quote removed")
+            elif e:
+                flash("Quote not removed: {}".format(e.message))
             return redirect(url_for('index'))
 
 if __name__ == "__main__":

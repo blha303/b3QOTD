@@ -16,6 +16,9 @@
       <textarea name=quote cols=80 rows=24></textarea>
       <input type=submit>
     </form>
+    <code>
+      $ nc home.blha303.biz 17
+    </code>
     <table>
       <tr>
         <th>Delete</th>
@@ -23,7 +26,7 @@
       </tr>
       {% for item in quotes %}
       <tr>
-        <td><form method=POST><input type=hidden name=_method value=DELETE><input type="submit" value="{{ item[0] }}"></form></td>
+        <td><form method=POST><input type=hidden name=_method value=DELETE><input type=hidden name=index value="{{ item[0] }}"><input type=submit value=Delete></form></td>
         <td><pre>{{ item[1] }}</pre></td>
       </tr>
       {% endfor %}

@@ -24,15 +24,17 @@ try:
                 client, addr = s.accept()
                 CONNECTION_LIST.append(client)
                 try:
-                    picked = random.choice(quotes)
+                    quotes = get_quotes()
+                    picked = random.choice(quotes) if len(quotes) > 1 else "\n<blha303> Hm, doesn't seem to be any quotes. Want to add one? http://qotd.home.blha303.biz\n\n"
                     client.send(picked)
                     client.close()
                     CONNECTION_LIST.remove(client)
                     print "Sent {}... to {}:{}".format(picked[:20].replace("\n", " "), *addr)
-                except:
+                except Exception, e:
                     client.close()
                     CONNECTION_LIST.remove(client)
                     print "Exception while sending to {}:{}".format(*addr)
+                    print e.message
                     continue
 except KeyboardInterrupt:
     print " Interrupt received, aborting"
