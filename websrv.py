@@ -19,11 +19,11 @@ def get_git_describe():
         if split[0][0] == "v": # tag only
             return fmt_tag(split[0])
         elif len(split[0]) == 8: # commit hash
-            return fmt_commit(split[0])
+            return fmt_commit(split[0][1:])
         else: # unknown
             return split[0]
     elif len(split) == 3 and GH_URL: # tag-rev-hash
-        return "-".join([fmt_tag(split[0]), split[1], fmt_commit(split[2])])
+        return "-".join([fmt_tag(split[0]), split[1], fmt_commit(split[2][1:])])
     return tag
 
 f = Flask(__name__)
