@@ -1,4 +1,4 @@
-b3QOTD
+[b3QOTD](http://qotd.home.blha303.biz)
 ======
 
 Quote it upppppp
