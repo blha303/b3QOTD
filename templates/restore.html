@@ -1,0 +1,36 @@
+<html>
+  <head>
+    <style>
+      a {
+        text-decoration: none;
+      }
+    </style>
+    <title>b3QOTD - Restore Backup</title>
+  </head>
+  <body>
+    <h2>b3QOTD - Restore Backup</h2>
+    <a href="/">Back</a>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          <h3>{{ message }}</h3>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    <table>
+      <tr>
+        <th>Restore</th>
+        <th>Filename/Link</th>
+      </tr>
+      {% for item in backups %}
+      <tr>
+        <td><form method=POST><input type="hidden" name="fn" value="{{ item }}"><input type="submit" value="Restore"></form></td>
+        <td><a href="/backups/{{ item }}">{{ item }}</a></td>
+      </tr>
+      {% endfor %}
+    </table>
+    <footer>
+      <a href="https://github.com/blha303/b3QOTD">b3QOTD</a> {{ info()|safe }}
+    </footer>
+  </body>
+</html>

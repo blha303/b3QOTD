@@ -5,6 +5,8 @@ from config import SECRET_KEY, GH_URL
 from time import time
 from subprocess import check_output
 from textwrap import fill
+from glob import glob
+from shutil import move
 
 def get_git_describe():
     """ Returns HTML string with current version. If on a tag: "v1.1.1"; if not on a tag or on untagged commit: "v1.1.1-1-abcdefgh"
@@ -108,6 +110,22 @@ def index():
                 flash("Quote removed")
             elif e:
                 flash("Quote not removed: {}".format(e.message))
+            return redirect(url_for('index'))
+
+@f.route('/restore', methods=["GET", "POST"])
+def restore():
+    if request.method == "GET":
+        return render_template("restore.html", backups=sorted([a[8:] for a in glob("backups/quotes.txt.*")]))
+    else:
+        backups = sorted([a[8:] for a in glob("backups/quotes.txt.*")])
+        if request.form["fn"] in backups:
+            with open("backups/quotes.txt." + str(int(time())), "w") as bk:
+                bk.write(get_quotes(raw=True))
+            move("backups/" + request.form["fn"], "quotes.txt")
+            flash("Backup restored (new backup created for old file)")
+            return redirect(url_for('index'))
+        else:
+            flash("Invalid filename")
             return redirect(url_for('index'))
 
 if __name__ == "__main__":
