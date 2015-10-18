@@ -1,3 +1,15 @@
 <+Hoolean> "We see you're logging in to Steam from a new browser or a new
            computer. Or maybe it's just been a while..."
 <+Hoolean> IT WAS LAST WEEK YOU PLEBS
+
+<@blha303> let me tell you how this project came about
+<@blha303> at 10pm yesterday i sat down and thought "what if i advertised every
+           service on my network with avahi/bonjour"
+<@blha303> so i went looking through this wiki page
+           https://wiki.archlinux.org/index.php/Avahi#Adding_Services
+<@blha303> and found instructions for adding a QOTD service
+<@blha303> "huh, I haven't used QOTD before. wonder how it works"
+<@blha303> *investigation*
+<@blha303> "well, that seems straightforward. hm, I wonder if I can implement
+           this"
+<@blha303> and six hours later we have a QOTD server with a wiki interface

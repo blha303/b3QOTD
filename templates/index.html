@@ -35,7 +35,7 @@
       {% for item in quotes %}
       <tr>
         <td><form method=POST><input type=hidden name=_method value=DELETE><input type=hidden name=index value="{{ item[0] }}"><input type=submit value=Delete></form></td>
-        <td><pre>{{ item[1] }}</pre></td>
+        <td><a href=#{{ item[0] }} name={{ item[0] }}><pre>{{ item[1] }}</pre></a></td>
       </tr>
       {% endfor %}
     </table>
@@ -44,4 +44,16 @@
       <a href="https://github.com/blha303/b3QOTD">b3QOTD</a> {{ info()|safe }}
     </footer>
   </body>
+  <script>
+  setInterval(function(){
+    pres = document.getElementsByTagName('pre');
+    for (var i = 0; i < pres.length; i++) {
+      if (i == window.location.hash.substring(1)) {
+        pres[i].style.backgroundColor = "yellow";
+      } else {
+        pres[i].style.backgroundColor = "";
+      }
+    }
+  }, 100);
+  </script>
 </html>
