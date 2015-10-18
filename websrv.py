@@ -7,20 +7,22 @@ from subprocess import check_output
 from textwrap import fill
 
 def get_git_describe():
-    tag = check_output(["git", "describe", "--tags"]).strip()
+    """ Returns HTML string with current version. If on a tag: "v1.1.1"; if not on a tag or on untagged commit: "v1.1.1-1-abcdefgh"
+        Also adds hyperlinks using GH_URL, set in config.py """
+    tag = check_output(["git", "describe", "--tags", "--always"]).strip()
     split = tag.split("-")
     def fmt_tag(tag):
         return '<a href="{0}/tree/{1}">{1}</a>'.format(GH_URL, tag)
     def fmt_commit(hash):
         return '<a href="{0}/commit/{1}">{1}</a>'.format(GH_URL, hash)
-    if len(split) == 1:
+    if len(split) == 1 and GH_URL:
         if split[0][0] == "v": # tag only
             return fmt_tag(split[0])
         elif len(split[0]) == 8: # commit hash
             return fmt_commit(split[0])
         else: # unknown
             return split[0]
-    elif len(split) == 3: # tag-rev-hash
+    elif len(split) == 3 and GH_URL: # tag-rev-hash
         return "-".join([fmt_tag(split[0]), split[1], fmt_commit(split[2])])
     return tag
 
@@ -30,10 +32,17 @@ f.secret_key = SECRET_KEY
 f.jinja_env.globals.update(info=get_git_describe)
 
 def get_quotes(raw=False):
+    """ Loads quotes.txt file """
     with open("quotes.txt") as f:
         return [u"\n{}\n\n".format(a.strip()) for a in f.read().split(u"\n\n")] if not raw else f.read()
 
 def add_quote(text):
+    """ Adds quote from input after formatting
+
+    :param text: Multi-line input
+    :returns: bool success, Exception error
+    :rtypes: bool, Exception
+    """
     try:
         if len(text) > 4000:
             raise Exception("Message longer than 50 lines (80 chars per line)")
@@ -51,6 +60,12 @@ def add_quote(text):
         return False, e
 
 def delete_quote(index):
+    """ Deletes quote
+
+    :param index: index of item to delete, starting from 0
+    :returns: Contents of deleted quote, Exception error
+    :rtype: str, Exception
+    """
     quotes = get_quotes()
     try:
         return quotes.pop(int(index)), None
@@ -63,6 +78,7 @@ def delete_quote(index):
             f.write(u"\n\n".join([a.strip() for a in quotes]))
 
 def request_wants_json():
+    """ http://flask.pocoo.org/snippets/45/ """
     best = request.accept_mimetypes \
         .best_match(['application/json', 'text/html'])
     return best == 'application/json' and \
