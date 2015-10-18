@@ -1,0 +1,25 @@
+<html>
+ <head>
+  <title>b3QOTD</title>
+ </head>
+ <body>
+  <h2>b3QOTD</h2>
+    <form method=POST>
+      <input type=hidden name=_method value=PUT>
+      <textarea name=quote cols=80 rows=24></textarea>
+      <input type=submit>
+    </form>
+    <table>
+      <tr>
+        <th>Delete</th>
+        <th>Quote</th>
+      </tr>
+    {% for item in quotes %}
+      <tr>
+        <td><form method=POST><input type=hidden name=_method value=DELETE><input type="submit" value="{{ item[0] }}"></form></td>
+        <td><pre>{{ item[1] }}</pre></td>
+      </tr>
+    {% endfor %}
+    </table>
+  </body>
+</html>

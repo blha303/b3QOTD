@@ -2,6 +2,7 @@
 import flask
 
 f = flask.Flask(__name__)
+f.debug = False
 
 def get_quotes():
     with open("quotes.txt") as f:
@@ -33,11 +34,15 @@ def delete_quote(index):
 @f.route("/", methods=["GET", "POST", "PUT", "DELETE"])
 def index():
     if flask.request.method == "GET":
-        return flask.render_template("index.html", quotes=enumerate(quotes))
-    elif flask.request.method in ["PUT", "POST"]:
-        return "Not yet implemented"
-    elif flask.request.method in ["DELETE"]:
-        return "Not yet implemented"
+        return flask.render_template("index.html", quotes=enumerate(get_quotes()))
+    elif flask.request.method in ["PUT", "POST", "DELETE"]:
+        method = flask.request.form["_method"] if "_method" in flask.request.form else flask.request.method
+        if method in ["PUT", "POST"]:
+            print(method, flask.request.form)
+            return "Not yet implemented"
+        elif method == "DELETE":
+            print(method, flask.request.form)
+            return "Not yet implemented"
 
 if __name__ == "__main__":
     f.run(port=57432)

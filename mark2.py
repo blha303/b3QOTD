@@ -1,17 +1,13 @@
 #!/usr/bin/env python2
 
-import socket, select, random, signal, errno
+import socket, select, random
 
 CONNECTION_LIST = []
 PORT = 17
 
-with open("quotes.txt") as f:
-    quotes = ["\n{}\n\n".format(a.strip()) for a in f.read().split("\n\n")]
-
-def reload(*args):
-    pass
-
-signal.signal(signal.SIGHUP, reload)
+def get_quotes():
+    with open("quotes.txt") as f:
+        return ["\n{}\n\n".format(a.strip()) for a in f.read().split("\n\n")]
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -22,10 +18,7 @@ CONNECTION_LIST.append(s)
 
 try:
     while 1:
-        try:
-            read_sockets,write_sockets,error_sockets = select.select(CONNECTION_LIST,[],[])
-        except select.error, v:
-            break
+        read_sockets,write_sockets,error_sockets = select.select(CONNECTION_LIST,[],[])
         for sock in read_sockets:
             if sock == s:
                 client, addr = s.accept()
