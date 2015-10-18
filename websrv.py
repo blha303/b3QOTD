@@ -4,6 +4,7 @@ from config import SECRET_KEY
 
 from time import time
 from subprocess import check_output
+from textwrap import fill
 
 def get_git_describe():
     tag = check_output(["git", "describe", "--tags"]).strip()
@@ -26,6 +27,7 @@ def add_quote(text):
             raise Exception("Message shorter than 10 chars, not adding")
         if "<blha303> This is an example" in text:
             raise Exception("Try putting a new quote in the box please")
+        text = "\n".join(fill(t, 80, replace_whitespace=False, subsequent_indent=(" " * (t.index("> ")+2)) if "> " in t else '') for t in text.split("\n")).replace("\n\n", "\n")
         with open("backups/quotes.txt." + str(int(time())), "w") as bk:
             bk.write(get_quotes(raw=True))
         with open("quotes.txt", "a") as f:
