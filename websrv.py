@@ -23,15 +23,10 @@ def add_quote(text):
             raise Exception("Message longer than 50 lines (80 chars per line)")
         if len(text) < 10:
             raise Exception("Message shorter than 10 chars, not adding")
-        o = []
-        while text > 80:
-            if text[0] != u"<" or text[0] != u" ":
-                raise Exception("Each line must start with either a <username>, or spaces for indentation")
-            o.append(text[:81])
-            text = text[81:]
-        o.append(text)
+        if "<blha303> This is an example" in text:
+            raise Exception("Try putting a new quote in the box please")
         with open("quotes.txt", "a") as f:
-            f.write(u"\n\n" + u"\n".join(text))
+            f.write(u"\n\n" + text)
         return True, None
     except Exception, e:
         return False, e

@@ -1,5 +1,10 @@
 <html>
   <head>
+    <style>
+      textarea {
+        font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
+      }
+    </style>
     <title>b3QOTD</title>
   </head>
   <body>
@@ -13,7 +18,13 @@
     {% endwith %}
     <form method=POST>
       <input type=hidden name=_method value=PUT>
-      <textarea name=quote cols=80 rows=24></textarea>
+      <textarea name=quote cols=80 rows=24>&lt;blha303&gt; This is an example of how to input text. You have up to 50 lines to type
+          whatever you want. Lines over 80 characters will be reformatted. All newlines
+          will be removed. I highly recommend you adopt a format per line of
+          "&lt;username&gt; quote", avoiding angle brackets where possible. Any instance of
+          " &lt;" will be split into a new line. I'm working on fixing this, believe me.
+          Probably something to do with regex.
+&lt;You&gt; Oh, ok, cool.</textarea>
       <input type=submit>
     </form>
     <code>
