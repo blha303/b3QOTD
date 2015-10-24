@@ -25,7 +25,7 @@ try:
                 CONNECTION_LIST.append(client)
                 try:
                     quotes = get_quotes()
-                    picked = random.choice(quotes) if len(quotes) > 1 else "\n<blha303> Hm, doesn't seem to be any quotes. Want to add one? http://qotd.home.blha303.biz\n\n"
+                    picked = random.choice(quotes) if len(quotes) >= 1 else "\n<blha303> Hm, doesn't seem to be any quotes. Want to add one? http://qotd.home.blha303.biz\n\n"
                     client.send(picked)
                     client.close()
                     CONNECTION_LIST.remove(client)

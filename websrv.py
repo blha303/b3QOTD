@@ -46,8 +46,8 @@ def add_quote(text):
     :rtypes: bool, Exception
     """
     try:
-        if len(text) > 4000:
-            raise Exception("Message longer than 50 lines (80 chars per line)")
+        if len(text) > 509:
+            raise Exception("Message longer than 509 characters (RFC limit for QOTD messages - newlines)")
         if len(text) < 10:
             raise Exception("Message shorter than 10 chars, not adding")
         if "<blha303> This is an example" in text:
